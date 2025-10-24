@@ -1,0 +1,41 @@
+<products>
+  <product id="1">
+    <name>Mango Smoothie</name>
+    <price>120</price>
+  </product>
+  <product id="2">
+    <name>Pineapple Blast</name>
+    <price>140</price>
+  </product>
+  <product id="3">
+    <name>Passion Fruit Mix</name>
+    <price>160</price>
+  </product>
+</products>
+
+
+<!-- <xml>
+    <packages>
+        <product id="1"> 
+            <name>Relax in our resorts</name>
+            <price>300</price>
+        </product>
+
+        <product id="2"> 
+            <name>Adventure on the islands</name>
+            <price>400</price>
+        </product>
+
+        <product id="3"> 
+            <name>Feel the culture</name>
+            <price>500</price>
+        </product>
+
+        <product id="1"> 
+            <name>Personal Adventure</name>
+            <price>600</price>
+        </product>
+
+    </packages>
+</xml>
+-->

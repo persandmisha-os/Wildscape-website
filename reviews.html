@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Tropical Juice Bar – Reviews</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Customer Reviews 💬</h1>
+
+  <div id="reviewList"></div>
+
+  <h3>Add Your Review</h3>
+  <form id="reviewForm">
+    <input type="text" id="user" placeholder="Your name" required><br>
+    <textarea id="comment" placeholder="Your comment" required></textarea><br>
+    <input type="number" id="rating" min="1" max="5" placeholder="Rating (1–5)" required><br>
+    <button type="submit">Submit Review</button>
+  </form>
+
+  <script>
+  // --- Load only visible reviews from JSON ---
+  function loadReviews() {
+    fetch('reviews.json')
+      .then(res => res.json())
+      .then(data => {
+        let output = "";
+        data.reviews.forEach((r, i) => {
+          if (r.visible) {
+            output += `<p><b>${r.user}</b> (${r.rating}⭐): ${r.comment}</p>`;
+          }
+        });
+        document.getElementById("reviewList").innerHTML = output || "<p>No reviews yet!</p>";
+      });
+  }
+
+  loadReviews();
+
+  // --- Add new review via AJAX ---
+  document.getElementById("reviewForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const user = document.getElementById("user").value;
+    const comment = document.getElementById("comment").value;
+    const rating = document.getElementById("rating").value;
+
+    fetch('addReview.php', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: `user=${encodeURIComponent(user)}&comment=${encodeURIComponent(comment)}&rating=${rating}`
+    })
+    .then(res => res.text())
+    .then(msg => {
+      alert(msg);
+      loadReviews(); // reload reviews
+      document.getElementById("reviewForm").reset();
+    });
+  });
+  </script>
+</body>
+</html>
