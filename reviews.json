@@ -1,45 +1,27 @@
 {
     "reviews": [
         {
-            "user": "Rina",
-            "comment": "Loved the Mango Smoothie!",
+            "user": "indira",
+            "comment": "Your dick tastes good avinash!",
             "rating": 5,
-            "visible": true
-        },
-        {
-            "user": "Kevin",
-            "comment": "Refreshing and tasty!",
-            "rating": 4,
-            "visible": true
-        },
-        {
-            "user": "Nadia",
-            "comment": "Too sweet for me",
-            "rating": 3,
             "visible": true
         },
         {
             "user": "Avinash",
-            "comment": "hello how are you?",
-            "rating": 3,
+            "comment": "hello",
+            "rating": 2,
             "visible": true
         },
         {
-            "user": "brendon",
-            "comment": "avinash is beautiful",
+            "user": "misha",
+            "comment": "i love avinash",
             "rating": 4,
             "visible": true
         },
         {
-            "user": "Shania",
-            "comment": "hello world\n",
-            "rating": 3,
-            "visible": true
-        },
-        {
-            "user": "achile",
-            "comment": "hello guys\n",
-            "rating": 5,
+            "user": "misha",
+            "comment": "avinash pln rodriguais &lt;3",
+            "rating": 1,
             "visible": true
         }
     ]

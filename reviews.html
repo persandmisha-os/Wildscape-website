@@ -2,59 +2,87 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Tropical Juice Bar – Reviews</title>
+  <title>Customer Reviews</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Customer Reviews 💬</h1>
+  <h1>Leave a Review 💬</h1>
 
-  <div id="reviewList"></div>
-
-  <h3>Add Your Review</h3>
+  <!-- Review Form -->
   <form id="reviewForm">
-    <input type="text" id="user" placeholder="Your name" required><br>
-    <textarea id="comment" placeholder="Your comment" required></textarea><br>
-    <input type="number" id="rating" min="1" max="5" placeholder="Rating (1–5)" required><br>
+    <label>Your Name:</label><br>
+    <input type="text" id="user" required><br><br>
+
+    <label>Your Comment:</label><br>
+    <textarea id="comment" rows="4" placeholder="Write your feedback..." required></textarea><br><br>
+
+    <label>Rating:</label><br>
+    <select id="rating" required>
+      <option value="">Select</option>
+      <option value="1">⭐ 1</option>
+      <option value="2">⭐ 2</option>
+      <option value="3">⭐ 3</option>
+      <option value="4">⭐ 4</option>
+      <option value="5">⭐ 5</option>
+    </select><br><br>
+
     <button type="submit">Submit Review</button>
   </form>
 
+  <hr>
+
+  <!-- Review Display Section -->
+  <h2>All Reviews</h2>
+  <div id="reviewList">Loading reviews...</div>
+
   <script>
-  // --- Load only visible reviews from JSON ---
-  function loadReviews() {
-    fetch('reviews.json')
-      .then(res => res.json())
-      .then(data => {
-        let output = "";
-        data.reviews.forEach((r, i) => {
-          if (r.visible) {
-            output += `<p><b>${r.user}</b> (${r.rating}⭐): ${r.comment}</p>`;
-          }
-        });
-        document.getElementById("reviewList").innerHTML = output || "<p>No reviews yet!</p>";
-      });
+  // Load existing reviews via AJAX
+  async function loadReviews() {
+    const res = await fetch('reviews.json?t=' + Date.now());
+    const data = await res.json();
+
+    // Filter visible reviews only
+    const visibleReviews = data.reviews.filter(r => r.visible);
+    if (visibleReviews.length === 0) {
+      document.getElementById("reviewList").innerHTML = "<p>No reviews yet.</p>";
+      return;
+    }
+
+    // Build HTML using DOM manipulation (via JS string building)
+    document.getElementById("reviewList").innerHTML = visibleReviews.map(r =>
+      `<p><b>${r.user}</b> (${r.rating}⭐): ${r.comment}</p>`
+    ).join('');
   }
 
-  loadReviews();
-
-  // --- Add new review via AJAX ---
-  document.getElementById("reviewForm").addEventListener("submit", e => {
+  // Handle form submission
+  document.getElementById("reviewForm").addEventListener("submit", async e => {
     e.preventDefault();
-    const user = document.getElementById("user").value;
-    const comment = document.getElementById("comment").value;
+
+    const user = document.getElementById("user").value.trim();
+    const comment = document.getElementById("comment").value.trim();
     const rating = document.getElementById("rating").value;
 
-    fetch('addReview.php', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: `user=${encodeURIComponent(user)}&comment=${encodeURIComponent(comment)}&rating=${rating}`
-    })
-    .then(res => res.text())
-    .then(msg => {
-      alert(msg);
-      loadReviews(); // reload reviews
-      document.getElementById("reviewForm").reset();
-    });
+    if (!user || !comment || !rating) {
+      alert("Please fill all fields.");
+      return;
+    }
+
+    // Send data to PHP (AJAX POST)
+    const formData = new FormData();
+    formData.append("user", user);
+    formData.append("comment", comment);
+    formData.append("rating", rating);
+
+    const res = await fetch("addReview.php", { method: "POST", body: formData });
+    const msg = await res.text();
+    alert(msg);
+
+    // Reload updated list
+    loadReviews();
+    e.target.reset();
   });
+
+  loadReviews(); // Initial load
   </script>
 </body>
 </html>

@@ -1,26 +1,32 @@
 <?php
+$file = 'reviews.json';
+
 // Get form data
-$user = $_POST['user'];
-$comment = $_POST['comment'];
+$user = trim($_POST['user']);
+$comment = trim($_POST['comment']);
 $rating = intval($_POST['rating']);
 
+// Validate
+if (!$user || !$comment || $rating < 1) {
+  exit("❌ Invalid input");
+}
+
 // Load existing reviews
-$file = 'reviews.json';
 $data = json_decode(file_get_contents($file), true);
 
 // Create new review
 $newReview = [
-  "user" => $user,
-  "comment" => $comment,
+  "user" => htmlspecialchars($user),
+  "comment" => htmlspecialchars($comment),
   "rating" => $rating,
   "visible" => true
 ];
 
-// Add to array
-$data["reviews"][] = $newReview;
+// Add new review to the array
+$data['reviews'][] = $newReview;
 
-// Save file
-file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT));
+// Save JSON file back
+file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
-echo "✅ Review added successfully!";
+echo "✅ Review submitted successfully!";
 ?>
